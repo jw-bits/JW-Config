@@ -1,0 +1,8 @@
+key0=100
+key1	= 256
+  k  =  555   
+why00 = 25000
+bbb=TRUE
+s1="string "test"
+s2="\t\r\n\\ /t/n/r// abcdEFG"
+s3=   "equal (=) sign test = FUN"
