@@ -156,16 +156,12 @@ JWParser::EReturnCode JWParser::ParseValue(const std::string &str, Value &jwValu
 	{
 		bool foundPeriod = (ch == '.');
 
-		for (u32 i = 1; i < len; ++i)
+		if (!foundPeriod)
 		{
-			if (IsDigit(s[i]) == false)
-			{
-				// Only possible case is if this is the FIRST '.'
-				if ((s[i] == '.') && (foundPeriod == false))
-					foundPeriod = true;
-				else
-					return EReturnCode::eMalformedData;
-			}
+			int idx = FindFirstOf(s, len, '.');
+
+			if (idx != -1)
+				foundPeriod = true;
 		}
 
 		if (foundPeriod) // It's a float
@@ -203,7 +199,7 @@ JWParser::EReturnCode JWParser::ParseValue(const std::string &str, Value &jwValu
 			bool A = (s[1] == 'a' || s[1] == 'A');
 			bool L = (s[2] == 'l' || s[2] == 'L');
 			bool S = (s[3] == 's' || s[3] == 'S');
-			bool E = (s[4] == 'e' || s[3] == 'E');
+			bool E = (s[4] == 'e' || s[4] == 'E');
 
 			if (A && L && S && E)
 			{

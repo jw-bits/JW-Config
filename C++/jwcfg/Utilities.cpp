@@ -60,7 +60,7 @@ int FindFirstOf(const c8* str, u32 strLen, c8 ch)
 	for(; idx < (int)strLen; ++idx)
 	{
 		if (str[idx] == ch)
-			return (int)idx;
+			return idx;
 	}
 
 	return -1;

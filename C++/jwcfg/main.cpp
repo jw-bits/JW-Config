@@ -1,10 +1,15 @@
 #include "JWParser.h"
 #include <fstream>
+#include <ctime>
 using namespace std;
 
 // Test app...
 int main()
 {
+	// Start the file reading
+	clock_t startTime = clock();
+	clock_t totalTime;
+
 	// Load test file
 	ifstream fs("JWTest.txt", ios::binary);
 
@@ -14,7 +19,7 @@ int main()
 	fs.seekg(0, ios::end);	
 	u32 totalFileSize = fs.tellg();
 
-	printf("Total File Size = %d\n\n", totalFileSize); 
+	printf("Total file size in bytes  = %d\n", totalFileSize); 
 
 	Buffer buffer;
 	buffer.init(totalFileSize);
@@ -26,8 +31,17 @@ int main()
 	fs.read(b, totalFileSize);
 	fs.close();
 
+	totalTime = clock() - startTime;
+	printf("Reading the file took %f seconds.\n\n", ((float)totalTime) / CLOCKS_PER_SEC);
+
+	// Start the parsing
+	startTime = clock();
+
 	JWParser::Map jwMap;
 	JWParser::Parse(buffer, jwMap);
+
+	totalTime = clock() - startTime;
+	printf("Parsing took %f seconds.\n\n", ((float)totalTime) / CLOCKS_PER_SEC);
 
 	for (JWParser::Iter it = jwMap.begin(); it != jwMap.end(); it++)
 	{
