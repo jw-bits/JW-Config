@@ -29,6 +29,11 @@ namespace jwcfg
                     Console.Write("\n");
                }
 
+               string asText = JWParser.ToString(jwMap);
+               
+               Console.Write("\n ... As text ... \n");
+               Console.Write(asText);               
+
                Console.ReadKey();
           }
      }

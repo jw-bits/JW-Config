@@ -95,6 +95,66 @@ static class JWParser
 		return EReturnCode.eSuccess;
 	}
 
+	public static EReturnCode Parse(string[] linesOfText, ref Dictionary<string, Value> jwMap)
+	{
+		if (linesOfText == null)
+			return EReturnCode.eNoValidData;
+
+		if (linesOfText.Length == 0)
+			return EReturnCode.eNoValidData;
+
+		jwMap.Clear();
+
+		for (int i = 0; i < linesOfText.Length; ++i)
+		{
+			var s = linesOfText[i];
+			int equalIdx = s.IndexOf('=');
+			
+			if (equalIdx == -1)
+				continue;
+			
+			string keyString = s.Substring(0, equalIdx).Trim();
+			string valueString = s.Substring(equalIdx + 1).Trim();
+
+			var v = new Value();
+
+			JWParser.EReturnCode rc = ParseValue(valueString, ref v);
+
+			if (rc != EReturnCode.eSuccess)
+				return rc;
+
+			jwMap.Add(keyString, v);
+		}
+
+		return EReturnCode.eSuccess;
+	}
+
+	public static string ToString(Dictionary<string, Value> jwMap)
+	{
+		if (jwMap.Count == 0)
+			return string.Empty;
+
+		var strBuilder = new StringBuilder();
+
+		foreach (var entry in jwMap)
+		{
+			string line = string.Empty;
+
+			switch(entry.Value.getType())
+			{
+				case Value.EType.eBool: line = string.Format("{0}={1}", entry.Key, entry.Value.asBool()); break;
+				case Value.EType.eInt: line = string.Format("{0}={1}", entry.Key, entry.Value.asInt()); break;
+				case Value.EType.eString: line = string.Format("{0}=\"{1}\"", entry.Key, entry.Value.asString()); break;
+				case Value.EType.eFloat: line = string.Format("{0}={1}", entry.Key, entry.Value.asFloat()); break;
+				default: break;
+			}
+
+               strBuilder.AppendLine(line);
+          }
+
+		return strBuilder.ToString();
+	}
+
 	private static bool IsValid(in string line)
 	{
 		int eq1 = line.IndexOf('=');
@@ -194,7 +254,7 @@ static class JWParser
 				bool A = (str[1] == 'a' || str[1] == 'A');
 				bool L = (str[2] == 'l' || str[2] == 'L');
 				bool S = (str[3] == 's' || str[3] == 'S');
-				bool E = (str[4] == 'e' || str[3] == 'E');
+				bool E = (str[4] == 'e' || str[4] == 'E');
 
 				if (A && L && S && E)
 				{

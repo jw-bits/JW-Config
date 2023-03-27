@@ -1,8 +1,10 @@
 key0=100
 key1	= 256
-  k  =  555   
-why00 = 25000
-bbb=TRUE
-s1="string "test"
-s2="\t\r\n\\ /t/n/r// abcdEFG"
-s3=   "equal (=) sign test = FUN"
+  key2  =  555.025   
+key3 = 25000
+key4=TRUE
+key5=FaLsE
+
+str1="string "test"
+str2="\t\r\n\\ /t/n/r// abcdEFG"
+str3=   "equal (=) sign test = FUN"
